@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>与你遨游天际</title>
+    <meta name="description" content="与你遨游天际，一封写给王小涵的温柔告白。" />
+    <style>
+      :root {
+        --bg-top: #ffb6dc;
+        --bg-mid: #ebc7ff;
+        --bg-bottom: #9ac6ff;
+        --text-main: rgba(255, 255, 255, 0.98);
+        --text-soft: rgba(255, 255, 255, 0.84);
+        --accent: #fff2ad;
+        --button-main: linear-gradient(135deg, #ff88c1, #c88fff);
+        --button-yes: linear-gradient(135deg, #ff78b7, #ff9fd2);
+        --button-light: rgba(255, 255, 255, 0.8);
+        --shadow: 0 24px 60px rgba(95, 58, 134, 0.18);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+        font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+        color: var(--text-main);
+        background: linear-gradient(180deg, var(--bg-top) 0%, var(--bg-mid) 34%, var(--bg-bottom) 100%);
+        overflow-x: hidden;
+      }
+
+      body {
+        position: relative;
+      }
+
+      button {
+        font: inherit;
+        border: 0;
+        cursor: pointer;
+      }
+
+      .sky {
+        position: relative;
+        min-height: 100vh;
+        overflow: hidden;
+      }
+
+      .sky::before,
+      .sky::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+      }
+
+      .sky::before {
+        background:
+          radial-gradient(circle at 18% 16%, rgba(255, 255, 255, 0.42), transparent 22%),
+          radial-gradient(circle at 82% 14%, rgba(255, 247, 205, 0.18), transparent 16%);
+      }
+
+      .sky::after {
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0));
+      }
+
+      .aurora {
+        position: absolute;
+        width: 420px;
+        height: 560px;
+        border-radius: 50%;
+        filter: blur(84px);
+        opacity: 0.3;
+        pointer-events: none;
+      }
+
+      .aurora.left {
+        top: 80px;
+        left: -140px;
+        background: rgba(255, 255, 255, 0.68);
+      }
+
+      .aurora.right {
+        top: 220px;
+        right: -180px;
+        background: rgba(255, 168, 220, 0.56);
+      }
+
+      .moon {
+        position: absolute;
+        top: 44px;
+        right: 34px;
+        width: 74px;
+        height: 74px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 38% 38%, #fffce8 0%, #fff6c8 52%, #f3dfb3 100%);
+        box-shadow: 0 0 28px rgba(255, 248, 202, 0.42);
+      }
+
+      .moon::after {
+        content: "";
+        position: absolute;
+        top: 6px;
+        right: 4px;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: rgba(237, 196, 255, 0.6);
+      }
+
+      .music-btn {
+        position: fixed;
+        top: calc(16px + env(safe-area-inset-top));
+        right: 16px;
+        z-index: 30;
+        min-width: 96px;
+        height: 42px;
+        padding: 0 16px;
+        border-radius: 999px;
+        color: #fff;
+        background: rgba(255, 255, 255, 0.18);
+        box-shadow: 0 10px 24px rgba(104, 68, 137, 0.16);
+        backdrop-filter: blur(12px);
+      }
+
+      .intro {
+        position: fixed;
+        inset: 0;
+        z-index: 20;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        background: linear-gradient(180deg, rgba(92, 48, 125, 0.24), rgba(66, 102, 178, 0.2));
+        backdrop-filter: blur(12px);
+        transition: opacity 0.45s ease, visibility 0.45s ease;
+      }
+
+      .intro.hidden {
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      .intro-card {
+        width: min(100%, 460px);
+        padding: 34px 24px;
+        border-radius: 28px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.12));
+        border: 1px solid rgba(255, 255, 255, 0.28);
+        box-shadow: var(--shadow);
+        text-align: center;
+      }
+
+      .intro-badge,
+      .page-index,
+      .success-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 14px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.18);
+      }
+
+      .intro-badge,
+      .success-badge {
+        font-size: 13px;
+        letter-spacing: 1px;
+      }
+
+      .intro-title,
+      .success-title {
+        margin: 18px 0 0;
+        font-size: clamp(34px, 8vw, 52px);
+        letter-spacing: 4px;
+        font-weight: 700;
+        text-shadow: 0 8px 18px rgba(93, 48, 129, 0.18);
+      }
+
+      .intro-subtitle,
+      .success-text {
+        margin: 18px 0 0;
+        font-size: 17px;
+        line-height: 1.95;
+        color: var(--text-soft);
+      }
+
+      .intro-btn,
+      .success-btn.primary {
+        width: 100%;
+        margin-top: 28px;
+        height: 52px;
+        border-radius: 999px;
+        color: #fff;
+        background: var(--button-main);
+        box-shadow: 0 14px 32px rgba(183, 103, 204, 0.3);
+      }
+
+      .intro-tip,
+      .success-hint {
+        margin: 16px 0 0;
+        font-size: 13px;
+        color: var(--text-soft);
+      }
+
+      .content {
+        position: relative;
+        z-index: 3;
+        width: min(100%, 860px);
+        margin: 0 auto;
+        padding: calc(74px + env(safe-area-inset-top)) 18px calc(32px + env(safe-area-inset-bottom));
+      }
+
+      .header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 18px;
+      }
+
+      .header-title {
+        margin: 0;
+        font-size: clamp(28px, 7vw, 42px);
+        letter-spacing: 2px;
+        text-shadow: 0 8px 16px rgba(82, 42, 112, 0.18);
+      }
+
+      .header-date {
+        margin-top: 8px;
+        font-size: 13px;
+        letter-spacing: 2px;
+        color: var(--text-soft);
+      }
+
+      .page-index {
+        white-space: nowrap;
+        font-size: 13px;
+        color: var(--text-main);
+      }
+
+      .card {
+        padding: 24px 18px;
+        border-radius: 28px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.12));
+        border: 1px solid rgba(255, 255, 255, 0.28);
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(16px);
+      }
+
+      .card-top {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+      }
+
+      .skip {
+        font-size: 14px;
+        color: var(--accent);
+        cursor: pointer;
+      }
+
+      .card-title {
+        margin: 18px 0 0;
+        font-size: clamp(25px, 5.5vw, 36px);
+        line-height: 1.45;
+        min-height: 76px;
+      }
+
+      .caret {
+        display: inline-block;
+        margin-left: 4px;
+        animation: blink 0.9s step-end infinite;
+      }
+
+      .card-text {
+        margin: 16px 0 0;
+        min-height: 220px;
+        font-size: clamp(17px, 4.4vw, 22px);
+        line-height: 1.95;
+        color: rgba(255, 255, 255, 0.96);
+        white-space: pre-wrap;
+      }
+
+      .result {
+        display: none;
+        margin-top: 22px;
+        padding: 20px 16px;
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.18);
+      }
+
+      .result.show {
+        display: block;
+      }
+
+      .result.pending {
+        box-shadow: 0 16px 36px rgba(255, 106, 176, 0.15);
+      }
+
+      .result-title {
+        font-size: 24px;
+        font-weight: 700;
+      }
+
+      .result-text,
+      .result-hint {
+        margin-top: 12px;
+        font-size: 16px;
+        line-height: 1.85;
+      }
+
+      .dots {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin: 20px 0 18px;
+      }
+
+      .dot {
+        width: 11px;
+        height: 11px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.34);
+        transition: all 0.3s ease;
+      }
+
+      .dot.active {
+        width: 28px;
+        background: rgba(255, 255, 255, 0.95);
+      }
+
+      .actions,
+      .success-actions {
+        display: flex;
+        gap: 14px;
+      }
+
+      .btn,
+      .success-btn {
+        flex: 1;
+        height: 50px;
+        border-radius: 999px;
+        font-size: 17px;
+        font-weight: 600;
+      }
+
+      .btn.light,
+      .success-btn.light {
+        color: #7f5c94;
+        background: var(--button-light);
+      }
+
+      .btn.main {
+        color: #fff;
+        background: var(--button-main);
+        box-shadow: 0 12px 28px rgba(191, 111, 213, 0.24);
+      }
+
+      .btn.yes {
+        color: #fff;
+        background: var(--button-yes);
+        box-shadow: 0 12px 28px rgba(255, 100, 176, 0.28);
+      }
+
+      .toast {
+        position: fixed;
+        left: 50%;
+        bottom: calc(28px + env(safe-area-inset-bottom));
+        z-index: 50;
+        transform: translateX(-50%) translateY(20px);
+        padding: 12px 18px;
+        border-radius: 999px;
+        background: rgba(68, 48, 103, 0.78);
+        color: #fff;
+        font-size: 14px;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(8px);
+      }
+
+      .toast.show {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(-50%) translateY(0);
+      }
+
+      .success-page {
+        position: fixed;
+        inset: 0;
+        z-index: 34;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        background: linear-gradient(180deg, rgba(255, 184, 220, 0.18), rgba(150, 198, 255, 0.22));
+        backdrop-filter: blur(10px);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.4s ease, visibility 0.4s ease;
+      }
+
+      .success-page.show {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .success-card {
+        position: relative;
+        z-index: 1;
+        width: min(100%, 500px);
+        padding: 34px 24px;
+        border-radius: 30px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.14));
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 28px 72px rgba(255, 110, 180, 0.22);
+        text-align: center;
+      }
+
+      .success-text {
+        color: rgba(255, 255, 255, 0.96);
+      }
+
+      .success-hint {
+        color: var(--accent);
+      }
+
+      .fireworks {
+        position: fixed;
+        inset: 0;
+        z-index: 35;
+        pointer-events: none;
+        overflow: hidden;
+      }
+
+      .firework {
+        position: absolute;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        opacity: 0;
+        animation: fireworkBurst var(--d, 1.8s) ease-out forwards;
+      }
+
+      .firework::before,
+      .firework::after {
+        content: "";
+        position: absolute;
+        inset: -54px;
+        border-radius: 50%;
+      }
+
+      .firework::before {
+        background:
+          radial-gradient(circle, var(--c1, #fff6aa) 0 9%, transparent 10% 100%),
+          radial-gradient(circle at 50% 0%, var(--c2, #ff8cc7) 0 8%, transparent 9% 100%),
+          radial-gradient(circle at 100% 50%, var(--c3, #c89bff) 0 8%, transparent 9% 100%),
+          radial-gradient(circle at 50% 100%, var(--c4, #8fd3ff) 0 8%, transparent 9% 100%),
+          radial-gradient(circle at 0% 50%, var(--c5, #ffffff) 0 8%, transparent 9% 100%);
+        filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.45));
+      }
+
+      .firework::after {
+        background:
+          radial-gradient(circle at 18% 20%, var(--c2, #ff8cc7) 0 6%, transparent 7% 100%),
+          radial-gradient(circle at 82% 22%, var(--c3, #c89bff) 0 6%, transparent 7% 100%),
+          radial-gradient(circle at 78% 78%, var(--c4, #8fd3ff) 0 6%, transparent 7% 100%),
+          radial-gradient(circle at 24% 80%, var(--c1, #fff6aa) 0 6%, transparent 7% 100%);
+        opacity: 0.9;
+      }
+
+      .star,
+      .heart,
+      .cloud,
+      .meteor {
+        position: absolute;
+        pointer-events: none;
+      }
+
+      .star {
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.96);
+        box-shadow: 0 0 12px rgba(255, 255, 255, 0.88);
+        animation: twinkle var(--d, 3s) ease-in-out infinite;
+        animation-delay: var(--delay, 0s);
+      }
+
+      .cloud {
+        left: -180px;
+        height: 64px;
+        animation: cloudFloat var(--d, 28s) linear infinite;
+        animation-delay: var(--delay, 0s);
+        opacity: var(--o, 0.4);
+      }
+
+      .cloud::before,
+      .cloud::after,
+      .cloud span {
+        content: "";
+        position: absolute;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.45);
+        backdrop-filter: blur(10px);
+      }
+
+      .cloud::before {
+        width: 86px;
+        height: 38px;
+        left: 18px;
+        bottom: 0;
+      }
+
+      .cloud::after {
+        width: 58px;
+        height: 58px;
+        left: 52px;
+        bottom: 12px;
+      }
+
+      .cloud span {
+        width: 70px;
+        height: 50px;
+        left: 92px;
+        bottom: 2px;
+      }
+
+      .heart {
+        bottom: -36px;
+        font-size: var(--size, 28px);
+        color: rgba(255, 255, 255, 0.72);
+        text-shadow: 0 0 16px rgba(255, 255, 255, 0.3);
+        animation: heartRise var(--d, 7s) linear infinite;
+        animation-delay: var(--delay, 0s);
+        opacity: var(--o, 0.5);
+      }
+
+      .heart.burst {
+        color: rgba(255, 112, 180, 0.95);
+        text-shadow: 0 0 16px rgba(255, 162, 210, 0.58);
+      }
+
+      .meteor {
+        width: 112px;
+        height: 3px;
+        border-radius: 999px;
+        transform: rotate(-28deg);
+        background: linear-gradient(90deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0));
+        box-shadow: 0 0 16px rgba(255, 255, 255, 0.62);
+        animation: meteorFall var(--d, 8s) linear infinite;
+        animation-delay: var(--delay, 0s);
+      }
+
+      @keyframes twinkle {
+        0%,
+        100% {
+          opacity: 0.35;
+          transform: scale(0.8);
+        }
+
+        50% {
+          opacity: 1;
+          transform: scale(1.18);
+        }
+      }
+
+      @keyframes blink {
+        0%,
+        100% {
+          opacity: 1;
+        }
+
+        50% {
+          opacity: 0;
+        }
+      }
+
+      @keyframes cloudFloat {
+        0% {
+          transform: translateX(0);
+        }
+
+        100% {
+          transform: translateX(calc(100vw + 240px));
+        }
+      }
+
+      @keyframes heartRise {
+        0% {
+          transform: translate3d(0, 0, 0) scale(0.8);
+          opacity: 0;
+        }
+
+        14% {
+          opacity: var(--o, 0.5);
+        }
+
+        55% {
+          transform: translate3d(-16px, -300px, 0) scale(1);
+        }
+
+        100% {
+          transform: translate3d(20px, -680px, 0) scale(1.14);
+          opacity: 0;
+        }
+      }
+
+      @keyframes meteorFall {
+        0% {
+          transform: translate3d(0, 0, 0) rotate(-28deg);
+          opacity: 0;
+        }
+
+        12% {
+          opacity: 1;
+        }
+
+        32% {
+          transform: translate3d(-150px, 150px, 0) rotate(-28deg);
+          opacity: 0;
+        }
+
+        100% {
+          transform: translate3d(-150px, 150px, 0) rotate(-28deg);
+          opacity: 0;
+        }
+      }
+
+      @keyframes fireworkBurst {
+        0% {
+          transform: scale(0.2);
+          opacity: 0;
+        }
+
+        18% {
+          opacity: 1;
+        }
+
+        72% {
+          transform: scale(1.2);
+          opacity: 1;
+        }
+
+        100% {
+          transform: scale(1.5);
+          opacity: 0;
+        }
+      }
+
+      @media (min-width: 768px) {
+        .content {
+          padding-left: 28px;
+          padding-right: 28px;
+        }
+
+        .card,
+        .success-card {
+          padding: 30px 28px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sky" id="sky">
+      <div class="aurora left"></div>
+      <div class="aurora right"></div>
+      <div class="moon"></div>
+
+      <div class="intro" id="intro">
+        <div class="intro-card">
+          <div class="intro-badge">For 王小涵</div>
+          <h1 class="intro-title">与你遨游天际</h1>
+          <p class="intro-subtitle">今晚的云、月亮、星星，和我想说的话，都想慢慢送给你。</p>
+          <button class="intro-btn" id="enterBtn">进入这片星空</button>
+          <p class="intro-tip">建议戴上耳机再点右上角音乐开始这场浪漫</p>
+        </div>
+      </div>
+
+      <button class="music-btn" id="musicBtn">♫ 音乐</button>
+
+      <main class="content">
+        <header class="header">
+          <div>
+            <h2 class="header-title">与你遨游天际</h2>
+            <div class="header-date" id="today"></div>
+          </div>
+          <div class="page-index" id="pageIndex">1 / 4</div>
+        </header>
+
+        <section class="card" id="mainCard">
+          <div class="card-top">
+            <div class="skip" id="skipBtn">跳过打字</div>
+          </div>
+
+          <h3 class="card-title" id="cardTitle"></h3>
+          <div class="card-text" id="cardText"></div>
+
+          <div class="result" id="resultBox">
+            <div class="result-title" id="resultTitle"></div>
+            <div class="result-text" id="resultText"></div>
+            <div class="result-hint" id="resultHint"></div>
+          </div>
+        </section>
+
+        <div class="dots" id="dots"></div>
+
+        <div class="actions" id="navActions">
+          <button class="btn light" id="prevBtn">上一页</button>
+          <button class="btn main" id="nextBtn">下一页</button>
+        </div>
+
+        <div class="actions" id="choiceActions" style="display: none">
+          <button class="btn yes" id="yesBtn">愿意 ❤️</button>
+          <button class="btn light" id="laterBtn">再考虑一下 😊</button>
+        </div>
+      </main>
+    </div>
+
+    <section class="success-page" id="successPage">
+      <div class="success-card">
+        <div class="success-badge">给王小涵的回答</div>
+        <h2 class="success-title">嘻嘻</h2>
+        <p class="success-text">
+          从这一刻开始，天空更温柔，星星更闪亮，连晚风都像在替我开心。王小涵，谢谢你愿意走进我的未来，往后每一天，我都想认真爱你、照顾你、陪你一起看更远的风景。
+        </p>
+        <p class="success-hint">烟花和爱心会一直庆祝到你点下一步为止 ❤️</p>
+        <div class="success-actions">
+          <button class="success-btn primary" id="replayBtn">再看一遍</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="fireworks" id="fireworks"></div>
+    <div class="toast" id="toast"></div>
+
+    <audio
+      id="bgm"
+      loop
+      preload="auto"
+      src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8a7344d4d.mp3?filename=romantic-sentimental-piano-116199.mp3"
+    ></audio>
+
+    <script>
+      const pages = [
+        {
+          title: "王小涵，有些话我想认真告诉你",
+          content:
+            "最近这段时间，对我来说真的不太轻松。工作上的事情让我有些迷茫，也有些不安。可是因为有你一直陪在我身边，我感觉心里特别温暖。"
+        },
+        {
+          title: "谢谢你一直在我身边",
+          content:
+            "我不知道接下来的路会不会顺利，也不知道未来会发生什么。但每次我低落、焦虑、撑不住的时候，你的关心和陪伴，都让我觉得自己没有那么孤单。"
+        },
+        {
+          title: "我慢慢确定了一件事",
+          content:
+            "以前我以为喜欢一个人，是某一瞬间的心动。后来我才明白，真正的喜欢，是在最难的时候，依然能从她身上感受到温暖，也会想好好珍惜她。"
+        },
+        {
+          title: "所以我想鼓起勇气问你",
+          content:
+            "王小涵，谢谢你出现在我的生活里。虽然现在的我可能还没有最好的事业，也没有最耀眼的成绩，但我会努力，认真生活，认真工作，也认真地喜欢你。王小涵，你愿意做我的女朋友吗？"
+        }
+      ];
+
+      const state = {
+        currentPage: 0,
+        typingTimer: null,
+        pageTimer: null,
+        heartLoop: null,
+        fireworkLoop: null,
+        isTyping: false
+      };
+
+      const sky = document.getElementById("sky");
+      const intro = document.getElementById("intro");
+      const enterBtn = document.getElementById("enterBtn");
+      const musicBtn = document.getElementById("musicBtn");
+      const bgm = document.getElementById("bgm");
+      const pageIndex = document.getElementById("pageIndex");
+      const today = document.getElementById("today");
+      const cardTitle = document.getElementById("cardTitle");
+      const cardText = document.getElementById("cardText");
+      const resultBox = document.getElementById("resultBox");
+      const resultTitle = document.getElementById("resultTitle");
+      const resultText = document.getElementById("resultText");
+      const resultHint = document.getElementById("resultHint");
+      const dots = document.getElementById("dots");
+      const prevBtn = document.getElementById("prevBtn");
+      const nextBtn = document.getElementById("nextBtn");
+      const yesBtn = document.getElementById("yesBtn");
+      const laterBtn = document.getElementById("laterBtn");
+      const navActions = document.getElementById("navActions");
+      const choiceActions = document.getElementById("choiceActions");
+      const skipBtn = document.getElementById("skipBtn");
+      const successPage = document.getElementById("successPage");
+      const replayBtn = document.getElementById("replayBtn");
+      const fireworks = document.getElementById("fireworks");
+      const toast = document.getElementById("toast");
+
+      function formatDate(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        return `${year}.${month}.${day}`;
+      }
+
+      function createDecor() {
+        const stars = Array.from({ length: 18 }, (_, index) => ({
+          top: `${4 + (index % 8) * 8}%`,
+          left: `${3 + ((index * 9) % 92)}%`,
+          size: 6 + (index % 4) * 2,
+          duration: `${2.4 + (index % 5) * 0.5}s`,
+          delay: `${(index % 4) * 0.45}s`
+        }));
+
+        const clouds = [
+          { top: "10%", width: 160, duration: "26s", delay: "0s", opacity: 0.52 },
+          { top: "24%", width: 138, duration: "32s", delay: "4s", opacity: 0.38 },
+          { top: "58%", width: 180, duration: "30s", delay: "2s", opacity: 0.45 },
+          { top: "74%", width: 148, duration: "34s", delay: "6s", opacity: 0.28 }
+        ];
+
+        const hearts = Array.from({ length: 28 }, (_, index) => ({
+          left: `${2 + ((index * 7) % 96)}%`,
+          duration: `${5 + (index % 5)}s`,
+          delay: `${index * 0.32}s`,
+          size: `${22 + (index % 4) * 6}px`,
+          opacity: (0.38 + (index % 5) * 0.1).toFixed(2)
+        }));
+
+        const meteors = [
+          { top: "12%", left: "72%", duration: "7.5s", delay: "1.2s" },
+          { top: "24%", left: "18%", duration: "9.5s", delay: "4.6s" },
+          { top: "40%", left: "82%", duration: "8.4s", delay: "2.8s" }
+        ];
+
+        stars.forEach((item) => {
+          const node = document.createElement("div");
+          node.className = "star";
+          node.style.top = item.top;
+          node.style.left = item.left;
+          node.style.width = `${item.size}px`;
+          node.style.height = `${item.size}px`;
+          node.style.setProperty("--d", item.duration);
+          node.style.setProperty("--delay", item.delay);
+          sky.appendChild(node);
+        });
+
+        clouds.forEach((item) => {
+          const node = document.createElement("div");
+          node.className = "cloud";
+          node.style.top = item.top;
+          node.style.width = `${item.width}px`;
+          node.style.setProperty("--d", item.duration);
+          node.style.setProperty("--delay", item.delay);
+          node.style.setProperty("--o", item.opacity);
+          node.innerHTML = "<span></span>";
+          sky.appendChild(node);
+        });
+
+        hearts.forEach((item) => {
+          const node = document.createElement("div");
+          node.className = "heart";
+          node.textContent = "❤";
+          node.style.left = item.left;
+          node.style.setProperty("--d", item.duration);
+          node.style.setProperty("--delay", item.delay);
+          node.style.setProperty("--size", item.size);
+          node.style.setProperty("--o", item.opacity);
+          sky.appendChild(node);
+        });
+
+        meteors.forEach((item) => {
+          const node = document.createElement("div");
+          node.className = "meteor";
+          node.style.top = item.top;
+          node.style.left = item.left;
+          node.style.setProperty("--d", item.duration);
+          node.style.setProperty("--delay", item.delay);
+          sky.appendChild(node);
+        });
+      }
+
+      function createDots() {
+        dots.innerHTML = "";
+        pages.forEach((_, index) => {
+          const dot = document.createElement("div");
+          dot.className = `dot${index === state.currentPage ? " active" : ""}`;
+          dots.appendChild(dot);
+        });
+      }
+
+      function clearTyping() {
+        if (state.typingTimer) {
+          clearInterval(state.typingTimer);
+          state.typingTimer = null;
+        }
+      }
+
+      function clearPageTimer() {
+        if (state.pageTimer) {
+          clearTimeout(state.pageTimer);
+          state.pageTimer = null;
+        }
+      }
+
+      function stopCelebrateLoops() {
+        if (state.heartLoop) {
+          clearInterval(state.heartLoop);
+          state.heartLoop = null;
+        }
+        if (state.fireworkLoop) {
+          clearInterval(state.fireworkLoop);
+          state.fireworkLoop = null;
+        }
+      }
+
+      function hideResult() {
+        resultBox.className = "result";
+        resultTitle.textContent = "";
+        resultText.textContent = "";
+        resultHint.textContent = "";
+      }
+
+      function burstHearts() {
+        Array.from({ length: 36 }).forEach((_, index) => {
+          const node = document.createElement("div");
+          node.className = "heart burst";
+          node.textContent = "❤";
+          node.style.left = `${2 + (index * 3) % 96}%`;
+          node.style.setProperty("--size", `${24 + (index % 5) * 7}px`);
+          node.style.setProperty("--d", `${3.6 + (index % 4) * 0.55}s`);
+          node.style.setProperty("--delay", `${index * 0.08}s`);
+          node.style.setProperty("--o", "0.95");
+          sky.appendChild(node);
+          setTimeout(() => node.remove(), 6500);
+        });
+      }
+
+      function burstFireworks() {
+        const palette = [
+          ["#fff6aa", "#ff8cc7", "#c89bff", "#8fd3ff", "#ffffff"],
+          ["#ffd6f0", "#ff9ac8", "#ffc7f7", "#9ccfff", "#fff2a8"],
+          ["#fff4bf", "#ff7fb9", "#d7b0ff", "#93e0ff", "#ffffff"]
+        ];
+
+        Array.from({ length: 10 }).forEach((_, index) => {
+          const node = document.createElement("div");
+          const colors = palette[index % palette.length];
+          node.className = "firework";
+          node.style.left = `${10 + (index * 9) % 80}%`;
+          node.style.top = `${12 + (index * 7) % 48}%`;
+          node.style.setProperty("--d", `${1.6 + (index % 3) * 0.25}s`);
+          node.style.setProperty("--c1", colors[0]);
+          node.style.setProperty("--c2", colors[1]);
+          node.style.setProperty("--c3", colors[2]);
+          node.style.setProperty("--c4", colors[3]);
+          node.style.setProperty("--c5", colors[4]);
+          node.style.animationDelay = `${index * 0.14}s`;
+          fireworks.appendChild(node);
+          setTimeout(() => node.remove(), 2600);
+        });
+      }
+
+      function openSuccessPage() {
+        clearPageTimer();
+        clearTyping();
+        stopCelebrateLoops();
+        successPage.classList.add("show");
+        burstHearts();
+        burstFireworks();
+        state.heartLoop = setInterval(() => {
+          burstHearts();
+        }, 2400);
+        state.fireworkLoop = setInterval(() => {
+          burstFireworks();
+        }, 1500);
+      }
+
+      function closeSuccessPage() {
+        stopCelebrateLoops();
+        successPage.classList.remove("show");
+      }
+
+      function showPendingResult() {
+        clearPageTimer();
+        resultBox.className = "result show pending";
+        resultTitle.textContent = "不行！必须愿意！！！";
+        resultText.textContent = "";
+        resultHint.textContent = "";
+      }
+
+      function scheduleAutoNext() {
+        clearPageTimer();
+        if (state.currentPage >= pages.length - 1) {
+          return;
+        }
+        state.pageTimer = setTimeout(() => {
+          state.currentPage += 1;
+          renderPage();
+        }, 2600);
+      }
+
+      function renderPage() {
+        clearPageTimer();
+        closeSuccessPage();
+        pageIndex.textContent = `${state.currentPage + 1} / ${pages.length}`;
+        createDots();
+        hideResult();
+        navActions.style.display = state.currentPage === pages.length - 1 ? "none" : "flex";
+        choiceActions.style.display = state.currentPage === pages.length - 1 ? "flex" : "none";
+        prevBtn.disabled = state.currentPage === 0;
+        skipBtn.style.display = "inline";
+        typePage();
+      }
+
+      function typePage() {
+        clearTyping();
+        const current = pages[state.currentPage];
+        let title = "";
+        let content = "";
+        let index = 0;
+        const merged = [
+          ...Array.from(current.title).map((char) => ({ type: "title", char })),
+          ...Array.from(current.content).map((char) => ({ type: "content", char }))
+        ];
+
+        state.isTyping = true;
+        cardTitle.innerHTML = '<span class="caret">|</span>';
+        cardText.textContent = "";
+
+        state.typingTimer = setInterval(() => {
+          if (index >= merged.length) {
+            clearTyping();
+            state.isTyping = false;
+            skipBtn.style.display = "none";
+            cardTitle.innerHTML = title;
+            scheduleAutoNext();
+            return;
+          }
+
+          const item = merged[index];
+          if (item.type === "title") {
+            title += item.char;
+            cardTitle.innerHTML = `${title}<span class="caret">|</span>`;
+          } else {
+            content += item.char;
+            cardText.textContent = content;
+          }
+          index += 1;
+        }, 68);
+      }
+
+      function skipTyping() {
+        const current = pages[state.currentPage];
+        clearTyping();
+        state.isTyping = false;
+        cardTitle.textContent = current.title;
+        cardText.textContent = current.content;
+        skipBtn.style.display = "none";
+        scheduleAutoNext();
+      }
+
+      let toastTimer = null;
+      function showToast(message) {
+        toast.textContent = message;
+        toast.classList.add("show");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+          toast.classList.remove("show");
+        }, 1600);
+      }
+
+      function toggleMusic() {
+        if (bgm.paused) {
+          bgm
+            .play()
+            .then(() => {
+              musicBtn.textContent = "♪ 暂停";
+            })
+            .catch(() => {
+              showToast("音乐加载失败");
+            });
+        } else {
+          bgm.pause();
+          musicBtn.textContent = "♫ 音乐";
+        }
+      }
+
+      enterBtn.addEventListener("click", () => {
+        intro.classList.add("hidden");
+        renderPage();
+      });
+
+      musicBtn.addEventListener("click", toggleMusic);
+      skipBtn.addEventListener("click", skipTyping);
+
+      prevBtn.addEventListener("click", () => {
+        if (state.currentPage === 0) return;
+        state.currentPage -= 1;
+        renderPage();
+      });
+
+      nextBtn.addEventListener("click", () => {
+        if (state.currentPage >= pages.length - 1) return;
+        state.currentPage += 1;
+        renderPage();
+      });
+
+      yesBtn.addEventListener("click", () => {
+        clearTyping();
+        clearPageTimer();
+        state.isTyping = false;
+        skipBtn.style.display = "none";
+        cardTitle.textContent = pages[state.currentPage].title;
+        cardText.textContent = pages[state.currentPage].content;
+        openSuccessPage();
+      });
+
+      laterBtn.addEventListener("click", () => {
+        clearPageTimer();
+        showToast("不行！必须愿意！！！");
+        showPendingResult();
+      });
+
+      replayBtn.addEventListener("click", () => {
+        state.currentPage = 0;
+        renderPage();
+      });
+
+      bgm.addEventListener("pause", () => {
+        musicBtn.textContent = "♫ 音乐";
+      });
+
+      bgm.addEventListener("play", () => {
+        musicBtn.textContent = "♪ 暂停";
+      });
+
+      bgm.addEventListener("error", () => {
+        showToast("音乐加载失败");
+      });
+
+      today.textContent = formatDate(new Date());
+      createDecor();
+    </script>
+  </body>
+</html>
