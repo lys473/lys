@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>与你遨游天际</title>
-    <meta name="description" content="与你遨游天际，一封写给王小涵的温柔告白。" />
+    <meta name="description" content="与王小涵遨游天际" />
     <style>
       :root {
         --bg-top: #ffb6dc;
@@ -155,8 +155,7 @@
       }
 
       .intro-badge,
-      .page-index,
-      .success-badge {
+      .page-index {
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -165,8 +164,7 @@
         background: rgba(255, 255, 255, 0.18);
       }
 
-      .intro-badge,
-      .success-badge {
+      .intro-badge {
         font-size: 13px;
         letter-spacing: 1px;
       }
@@ -199,8 +197,7 @@
         box-shadow: 0 14px 32px rgba(183, 103, 204, 0.3);
       }
 
-      .intro-tip,
-      .success-hint {
+      .intro-tip {
         margin: 16px 0 0;
         font-size: 13px;
         color: var(--text-soft);
@@ -392,13 +389,15 @@
       .success-page {
         position: fixed;
         inset: 0;
-        z-index: 34;
+        z-index: 60;
         display: flex;
         align-items: center;
         justify-content: center;
         padding: 24px;
-        background: linear-gradient(180deg, rgba(255, 184, 220, 0.18), rgba(150, 198, 255, 0.22));
-        backdrop-filter: blur(10px);
+        background:
+          radial-gradient(circle at 18% 16%, rgba(255, 255, 255, 0.16), transparent 22%),
+          radial-gradient(circle at 82% 14%, rgba(255, 247, 205, 0.12), transparent 16%),
+          linear-gradient(180deg, rgba(255, 182, 220, 0.96), rgba(235, 199, 255, 0.97), rgba(154, 198, 255, 0.98));
         opacity: 0;
         visibility: hidden;
         transition: opacity 0.4s ease, visibility 0.4s ease;
@@ -425,14 +424,10 @@
         color: rgba(255, 255, 255, 0.96);
       }
 
-      .success-hint {
-        color: var(--accent);
-      }
-
       .fireworks {
         position: fixed;
         inset: 0;
-        z-index: 35;
+        z-index: 70;
         pointer-events: none;
         overflow: hidden;
       }
@@ -541,6 +536,17 @@
       .heart.burst {
         color: rgba(255, 112, 180, 0.95);
         text-shadow: 0 0 16px rgba(255, 162, 210, 0.58);
+      }
+
+      .success-page .success-bg-heart {
+        position: absolute;
+        bottom: -40px;
+        font-size: var(--size, 28px);
+        color: rgba(255, 255, 255, 0.78);
+        text-shadow: 0 0 16px rgba(255, 255, 255, 0.3);
+        animation: heartRise var(--d, 7s) linear infinite;
+        animation-delay: var(--delay, 0s);
+        opacity: var(--o, 0.5);
       }
 
       .meteor {
@@ -721,12 +727,10 @@
 
     <section class="success-page" id="successPage">
       <div class="success-card">
-        <div class="success-badge">给王小涵的回答</div>
         <h2 class="success-title">嘻嘻</h2>
         <p class="success-text">
           从这一刻开始，天空更温柔，星星更闪亮，连晚风都像在替我开心。王小涵，谢谢你愿意走进我的未来，往后每一天，我都想认真爱你、照顾你、陪你一起看更远的风景。
         </p>
-        <p class="success-hint">烟花和爱心会一直庆祝到你点下一步为止 ❤️</p>
         <div class="success-actions">
           <button class="success-btn primary" id="replayBtn">再看一遍</button>
         </div>
@@ -942,6 +946,24 @@
         });
       }
 
+      function ensureSuccessHearts() {
+        if (successPage.querySelector(".success-bg-heart")) {
+          return;
+        }
+
+        Array.from({ length: 24 }).forEach((_, index) => {
+          const node = document.createElement("div");
+          node.className = "success-bg-heart";
+          node.textContent = "❤";
+          node.style.left = `${2 + ((index * 7) % 96)}%`;
+          node.style.setProperty("--d", `${5 + (index % 5)}s`);
+          node.style.setProperty("--delay", `${index * 0.28}s`);
+          node.style.setProperty("--size", `${22 + (index % 4) * 6}px`);
+          node.style.setProperty("--o", (0.4 + (index % 5) * 0.08).toFixed(2));
+          successPage.appendChild(node);
+        });
+      }
+
       function burstFireworks() {
         const palette = [
           ["#fff6aa", "#ff8cc7", "#c89bff", "#8fd3ff", "#ffffff"],
@@ -971,6 +993,7 @@
         clearPageTimer();
         clearTyping();
         stopCelebrateLoops();
+        ensureSuccessHearts();
         successPage.classList.add("show");
         burstHearts();
         burstFireworks();
